@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-success mb-3" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">WSC Rubbish Classification Learning Hub</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/news">News</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/quiz">Quiz</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About Us</a>
+          </li>
+        </ul>
+        <div class="dropdown">
+  <button class="btn btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <a class="btn btn-success">Login</a></li>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="/login">Login</a></li>
+    <li><a class="dropdown-item" href="#">Logout</a></li>
+  </ul>
+</div>
+    </div>
+  </nav>
+    <div class="container">
+        <h1 class="text-center mb-4">Quiz Time!</h1>
+        
+   {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            {% for question in questions %}
+            <div class="card p-4">
+                <p class="h5 mb-3">{{ loop.index }}. {{ question.question }}</p>
+                
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="{{ question.id }}" value="A" id="q{{ question.id }}_a" {% if show_results and user_answers[question.id] == 'A' %}checked{% endif %} {% if show_results %}disabled{% endif %}>
+                    <label class="form-check-label {% if show_results and question.answer == 'A' %}text-success fw-bold{% elif show_results and user_answers[question.id] == 'A' and user_answers[question.id] != question.answer %}text-danger{% endif %}" for="q{{ question.id }}_a">
+                        A: {{ question.option_A }}
+                    </label>
+                </div>
+                
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="{{ question.id }}" value="B" id="q{{ question.id }}_b" {% if show_results and user_answers[question.id] == 'B' %}checked{% endif %} {% if show_results %}disabled{% endif %}>
+                    <label class="form-check-label {% if show_results and question.answer == 'B' %}text-success fw-bold{% elif show_results and user_answers[question.id] == 'B' and user_answers[question.id] != question.answer %}text-danger{% endif %}" for="q{{ question.id }}_b">
+                        B: {{ question.option_B }}
+                    </label>
+                </div>
+                
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="{{ question.id }}" value="C" id="q{{ question.id }}_c" {% if show_results and user_answers[question.id] == 'C' %}checked{% endif %} {% if show_results %}disabled{% endif %}>
+                    <label class="form-check-label {% if show_results and question.answer == 'C' %}text-success fw-bold{% elif show_results and user_answers[question.id] == 'C' and user_answers[question.id] != question.answer %}text-danger{% endif %}" for="q{{ question.id }}_c">
+                        C: {{ question.option_C }}
+                    </label>
+                </div>
+
+                {% if show_results and user_answers[question.id] != correct_answers[question.id] %}
+                    <p class="text-muted mt-2">The correct answer was: <span class="text-success fw-bold">{{ correct_answers[question.id] }}: {% if correct_answers[question.id] == 'A' %}{{ question.option_A }}{% elif correct_answers[question.id] == 'B' %}{{ question.option_B }}{% else %}{{ question.option_C }}{% endif %}</span></p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <div class="d-grid gap-2">
+            {% if not show_results %}
+                <button type="submit" class="btn btn-success btn-lg mt-3">Submit Quiz</button>
+            {% else %}
+                <a href="{{ url_for('homepage') }}" class="btn btn-secondary btn-lg mt-3">Back to Home</a>
+            {% endif %}
+            </div>
+        </form>
+    </div>
+</body>
+</html>

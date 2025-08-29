@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/signup.css') }}">
+</head>
+<body><body style="background-color: rgb(143, 224, 170);">
+  <div class="login-container">
+   <div class="login-box">
+    <!-- Signup Title -->
+    <h5 class="card-title mb-3">Sign up</h5>
+
+  <!-- Input box -->
+   <form method="POST">
+    <div class="form-floating mb-3 d-flex">
+  <input type="username" class="form-control" id="floatingInput" placeholder="name@example.com" style="width: 400px;" name="username" required>
+  <label for="floatingInput">Email address/Username</label>
+  </div>
+  <div class="form-floating mb-3">
+  <input type="password" class="form-control" id="floatingPassword" placeholder="Password" style="width: 400px;" name="password" required>
+  <label for="floatingPassword">New Password</label>
+  </div>
+  <div class="form-floating mb-3 d-flex">
+  <input type="password" class="form-control" id="floatingInput" placeholder="name@example.com" style="width: 400px;" name="password2" required>
+  <label for="floatingInput">Comfirm your password</label>
+  </div>
+  <button type="submit" class="btn btn-success mb-3" style="width: 400px;">Sign up</button>
+  {% if message %}
+    <p style="color: red;">{{ message }}</p>
+  {% endif %}
+  </form>
+   <a href="/login" class="mb-3">Login</a>
+   <a class="mb-3" href="/">Not now</a>
+</div>
+</div>
+</body>
+</html>
+    
+</body>
+</html>
+<html></html>
