@@ -8,10 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/login.css') }}">
 </head>
+<!-- Appearance -->
 <body style="background-color: rgb(143, 224, 170);">
   <div class="login-container">
    <div class="login-box">
     <h5 class="card-title mb-4">Login</h5>
+    <!-- Detail of login -->
  <form method="POST" action="/login">
     <div class="form-floating mb-4 d-flex">
   <input type="username" class="form-control" id="username" name="username" placeholder="name@example.com" style="width: 400px;" required>

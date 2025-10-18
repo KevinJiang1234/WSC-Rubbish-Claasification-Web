@@ -1,3 +1,4 @@
+#Using flask to make the backend
 from flask import Flask, render_template,request, Blueprint, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -22,6 +23,7 @@ app.register_blueprint(admin_r)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+#User table
 class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(100))
@@ -42,11 +44,13 @@ class User(db.Model):
     def is_anonymous(self):
         return False
 
+#News table
 class News(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(255))
     content = db.Column(db.Text)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+#Quiz table
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     question = db.Column(db.Text)
@@ -54,6 +58,7 @@ class Quiz(db.Model):
     option_B = db.Column(db.Text)
     option_C = db.Column(db.Text)
     answer = db.Column(db.Text)
+#Quiz result table
 class QuizResult(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer)
@@ -61,7 +66,7 @@ class QuizResult(db.Model):
     number_of_question_correct = db.Column(db.Integer)
     date = db.Column(db.DateTime)    
 
-
+#Teleport to each pages
 @login_manager .user_loader
 def load_user(user_id):
     return User.query.get(user_id)
@@ -75,10 +80,11 @@ def login():
     if current_user.is_authenticated:
         return redirect("/")
 
+#Users are able to login in 
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username, password=password).first()
+        user = User.query.filter_by(username=username, password=password).first()#Verify users' identity
 
         if user:
             login_user(user, remember=True)
@@ -97,6 +103,7 @@ def logout():
     logout_user()
     return redirect("/")
 
+#Require users sign up before login
 @app.route("/signup", methods=['GET','POST'])
 def signup():
     if request.method == 'POST':
@@ -121,6 +128,7 @@ def signup():
 def forgetpassword():
     return render_template('forgetpassword.html')
 
+#Setting news requirements and allow admin to edit
 @app.route("/admin/create_news", methods=['GET', 'POST'])
 @login_required
 def create_news_article():
@@ -157,6 +165,7 @@ def news_detail(news_id):
 def create_quiz_number_of_questions():
     return render_template('quiz_number_of_questions.html')
 
+#QUiz requirements and set the current options and answers to each question
 @app.route("/create_quiz", methods=['GET','POST'])
 @login_required
 def create_quiz():
@@ -186,7 +195,7 @@ def create_quiz():
         db.session.commit()
         return redirect("/")
 
-
+#The appearance of the quiz page and the detail of how quiz works
 @app.route("/quiz", methods=['GET', 'POST'])
 @login_required
 def quiz():
@@ -223,7 +232,7 @@ def quiz():
         return render_template('quiz.html', questions=questions, show_results=False)
     
 
-
+#The service of host computer
 if __name__ == '__main__':
       with app.app_context():
           db.create_all()
